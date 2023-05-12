@@ -33,25 +33,18 @@ class PaginationHelper:
 
     # returns the number of pages
     def page_count(self):
-        return int(len(self.collection) / self.items) + (len(self.collection) % self.items > 0)
+        return -(-self.item_count() // self.items)
 
     # returns the number of items on the given page. page_index is zero based
     # this method should return -1 for page_index values that are out of range
     def page_item_count(self, page_index):
-        if page_index < 0 or page_index >= self.page_count():
-            return -1
-        elif page_index < self.page_count() - 1:
-            return self.items
-        else:
-            return self.item_count() - (self.page_count() - 1) * self.items
+        return min(self.items, self.item_count() - page_index * self.items) \
+            if 0 <= page_index <= self.page_count() - 1 else -1
 
     # determines what page an item at the given index is on. Zero based indexes.
     # this method should return -1 for item_index values that are out of range
     def page_index(self, item_index):
-        if item_index < 0 or item_index >= self.item_count():
-            return -1
-        else:
-            return int(item_index / self.items)
+        return int(item_index / self.items) if 0 <= item_index < self.item_count() else -1
 
 
 helper = PaginationHelper(['a','b','c','d','e','f'], 4)
