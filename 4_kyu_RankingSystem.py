@@ -56,10 +56,11 @@ class InvalidRanking(Exception):
 
 class User:
 
+    valid_ranks = (-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8)
+
     def __init__(self):
         self.rank = -8
         self.progress = 0
-        self.valid_ranks = (-8, -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 8)
 
     def rank_adjustment (self):
         if self.rank == 8:
@@ -78,11 +79,24 @@ class User:
 
         if problem_rank == self.rank:
             self.progress += 3
-        elif problem_rank == self.rank - 1:
+        elif self.valid_ranks.index(problem_rank) == self.valid_ranks.index(self.rank) - 1:
             self.progress += 1
         elif problem_rank > self.rank:
             self.progress += 10 * (self.valid_ranks.index(problem_rank) -self.valid_ranks.index(self.rank)) ** 2
 
         self.rank_adjustment()
 
+def initiation(problemlevel):
+    print (f"User of level {user.rank} with progress {user.progress} solving problem level {problemlevel} ")
 
+def resulting():
+    print (f"User is now {user.rank} with progress {user.progress}")
+
+
+user = User()
+problem_sequence = [-6, -7, -5, -1, -6, -8, -8, 4, -1, 6]
+
+for problem in problem_sequence:
+    initiation(problem)
+    user.inc_progress(problem)
+    resulting()
